@@ -68,6 +68,8 @@ const loadScriptList = async () => {
   return Object.assign(scripts, updatedScripts)
 }
 
+export const getArray = <T>(array: T[]) => (Array.isArray(array) ? array : [])
+
 const upgrade = async () => {
   const tempDir = join(libRoot, "__temp__")
   await downloadZip('https://github.com/Saber2pr/sa/archive/refs/heads/master.zip', tempDir)
@@ -81,13 +83,24 @@ export const runInWorkspace = async () => {
   const scriptName = args[0]
   const scriptArgs = args.slice(1)
 
-  if (scriptName === 'upgrade') {
-    try {
-      await upgrade()
-      console.log('upgrade success')
-    } catch (error) {
-      console.log('upgrade fail', error)
+  if (scriptName === '_') {
+    const sysScript = scriptArgs[0]
+    if (sysScript === 'upgrade') {
+      try {
+        await upgrade()
+        console.log('upgrade success')
+      } catch (error) {
+        console.log('upgrade fail', error)
+      }
+      return
     }
+
+    if (sysScript === 'ls') {
+      console.log(Object.keys(scriptsList).join('\n'))
+      return
+    }
+
+    console.log(`Sys Command Fail: ${sysScript} not found.`)
     return
   }
 

@@ -10,7 +10,7 @@ export const downloadZip = async (
   return new Promise(async (resolve, reject) => {
     const stream = await got.stream(tarballUrl) as Stream
     stream.pipe(unzipper.Extract({ path: projectLocation }))
-    stream.on('finish', resolve)
+    stream.on('end', resolve)
     stream.on('error', reject)
   })
 }
