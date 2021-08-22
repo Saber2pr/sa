@@ -8,7 +8,8 @@
   },
   "author": "saber2pr",
   "files": [
-    "lib"
+    "lib",
+    "scripts"
   ],
   "bin": {
     "sa": "./lib/cli.js"
