@@ -1,6 +1,6 @@
 {
   "name": "@saber2pr/cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "sa cli.",
   "repository": {
     "type": "git",
@@ -16,10 +16,14 @@
   "main": "./lib/index.js",
   "scripts": {
     "test": "node ./lib/cli.js",
-    "start": "tsc --watch"
+    "start": "tsc --watch",
+    "build": "tsc",
+    "prepublishOnly": "yarn build",
+    "release": "standard-version"
   },
   "devDependencies": {
     "@types/node": "^16.7.1",
+    "standard-version": "^9.3.1",
     "typescript": "^4.3.5"
   },
   "dependencies": {
