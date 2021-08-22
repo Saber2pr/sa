@@ -1,7 +1,10 @@
 # @saber2pr/cli
 
 ```bash
+# install cli
 npm i -g @saber2pr/cli
+# fetch scripts
+sa _ upgrade
 ```
 
 # Usage
