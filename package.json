@@ -11,7 +11,7 @@
     "lib"
   ],
   "bin": {
-    "sa": "./lib/index.js"
+    "sa": "./lib/cli.js"
   },
   "main": "./lib/index.js",
   "scripts": {
