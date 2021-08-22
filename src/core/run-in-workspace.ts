@@ -71,7 +71,7 @@ export const runInWorkspace = async () => {
 
   if (scriptName === '_') {
     const sysScript = scriptArgs[0]
-    if (sysScript === 'upgrade') {
+    if (sysScript === 'upgrade' || sysScript === 'u') {
       try {
         await upgrade()
         console.log('upgrade success')

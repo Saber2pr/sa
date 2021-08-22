@@ -4,7 +4,7 @@
 # install cli
 npm i -g @saber2pr/cli
 # fetch scripts
-sa _ upgrade
+sa _ u
 ```
 
 # Usage
@@ -15,6 +15,9 @@ sa _ <command> <args>
 
 # upgrade scripts list
 sa _ upgrade
+# or
+sa _ u
+
 # ls all commands
 sa _ ls
 
