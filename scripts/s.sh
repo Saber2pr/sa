@@ -1,5 +1,11 @@
 platform=$1
-keywords=$2
+params="${@:2}"
+
+uriencode() {
+  node -p "encodeURI('${1}')"
+}
+
+keywords="$(echo "$(uriencode "$params")")"
 
 if [ "$platform" = "" ]; then
   echo "The platform is required"
