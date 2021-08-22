@@ -1,0 +1,1 @@
+git remote $1

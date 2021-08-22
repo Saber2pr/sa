@@ -1,8 +1,11 @@
-import { spawn } from "child_process"
-import { readdir } from "fs/promises"
-import { join, parse, resolve } from "path"
+import { spawn } from 'child_process';
+import { readdir } from 'fs/promises';
+import { join, parse, resolve } from 'path';
+
+import { downloadZip } from './downloadZip';
 
 const libRoot = resolve(join(__dirname, '../../'))
+const updatedScriptsDir = join(libRoot, '__temp__', 'sa-master', 'scripts')
 const scriptsDir = join(libRoot, 'scripts')
 
 const runShell = (workspace: string, shellFile: string, args: string[]) => {
@@ -39,24 +42,35 @@ type Script = {
   }
 }
 
-const loadScriptList = async () => {
-  const scriptsFiles = await readdir(scriptsDir)
-  const scripts = scriptsFiles
+const parseScripts = (dir: string, scriptsFiles: string[]) =>
+  (scriptsFiles && dir) ? scriptsFiles
     .reduce((acc, fileName) => {
       const name = parse(fileName).name
-      const path = join(scriptsDir, fileName)
+      const path = join(dir, fileName)
       acc[name] = {
         path,
         name,
         fileName
       }
       return acc
-    }, {} as Script)
-  return scripts
+    }, {} as Script) : {}
+
+const loadScriptList = async () => {
+  const scriptsFiles = await readdir(scriptsDir)
+  let updatedScriptsFiles = null
+  try {
+    updatedScriptsFiles = await readdir(updatedScriptsDir)
+  } catch (error) { }
+
+  const scripts = parseScripts(scriptsDir, scriptsFiles)
+  const updatedScripts = parseScripts(updatedScriptsDir, updatedScriptsFiles)
+
+  return Object.assign(scripts, updatedScripts)
 }
 
 const upgrade = async () => {
-  
+  const tempDir = join(libRoot, "__temp__")
+  await downloadZip('https://github.com/Saber2pr/sa/archive/refs/heads/master.zip', tempDir)
 }
 
 export const runInWorkspace = async () => {
@@ -66,6 +80,16 @@ export const runInWorkspace = async () => {
 
   const scriptName = args[0]
   const scriptArgs = args.slice(1)
+
+  if (scriptName === 'upgrade') {
+    try {
+      await upgrade()
+      console.log('upgrade success')
+    } catch (error) {
+      console.log('upgrade fail', error)
+    }
+    return
+  }
 
   if (scriptName in scriptsList) {
     const script = scriptsList[scriptName]

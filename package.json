@@ -21,5 +21,9 @@
   "devDependencies": {
     "@types/node": "^16.7.1",
     "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "got": "^11.8.2",
+    "unzipper": "^0.10.11"
   }
 }
