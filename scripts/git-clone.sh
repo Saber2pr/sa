@@ -1,0 +1,1 @@
+git clone https://github.com/Saber2pr/$1.git
