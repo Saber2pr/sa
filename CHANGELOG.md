@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/Saber2pr/sa/compare/v0.0.4...v0.0.5) (2021-08-22)
+
+
+### Bug Fixes
+
+* scripts dir ([f983043](https://github.com/Saber2pr/sa/commit/f983043947fea48c67af44046a4d3947040625f0))
+
 ### [0.0.4](https://github.com/Saber2pr/sa/compare/v0.0.3...v0.0.4) (2021-08-22)
 
 
