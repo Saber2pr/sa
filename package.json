@@ -1,0 +1,25 @@
+{
+  "name": "@saber2pr/cli",
+  "version": "0.0.1",
+  "description": "sa cli.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saber2pr/sa.git"
+  },
+  "author": "saber2pr",
+  "files": [
+    "lib"
+  ],
+  "bin": {
+    "sa": "./lib/index.js"
+  },
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "node ./lib/cli.js",
+    "start": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.1",
+    "typescript": "^4.3.5"
+  }
+}
