@@ -9,28 +9,14 @@ const updatedScriptsDir = join(libRoot, '__temp__', 'sa-master', 'scripts')
 const scriptsDir = join(libRoot, 'scripts')
 
 const runShell = (workspace: string, shellFile: string, args: string[]) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const task = spawn(`sh ${shellFile}`, args, {
       cwd: workspace,
       env: process.env,
-      shell: true
+      shell: true,
+      stdio: "inherit"
     })
-
-    let _data = ''
-    let _error = ''
-    task.stdout.on('data', (data) => {
-      console.log(`${data}`);
-      _data += data
-    });
-
-    task.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      _error += data
-    });
-
-    task.on('close', (code) => {
-      resolve(_error ? `Error: ${_error}` : _data)
-    });
+    task.on('close', resolve)
   })
 }
 
