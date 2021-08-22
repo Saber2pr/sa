@@ -1,0 +1,1 @@
+git merge -X theirs $1
