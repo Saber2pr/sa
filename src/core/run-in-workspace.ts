@@ -1,11 +1,14 @@
 import { spawn } from 'child_process';
 import { readdir } from 'fs/promises';
+import { homedir } from 'os';
 import { join, parse, resolve } from 'path';
 
 import { downloadZip } from './downloadZip';
 
+const tempDir = join(homedir(), 'saber2pr-cli')
+const updatedScriptsDir = join(tempDir, 'sa-master', 'scripts')
+
 const libRoot = resolve(join(__dirname, '../../'))
-const updatedScriptsDir = join(libRoot, '__temp__', 'sa-master', 'scripts')
 const scriptsDir = join(libRoot, 'scripts')
 
 const runShell = (workspace: string, shellFile: string, args: string[]) => {
@@ -57,7 +60,6 @@ const loadScriptList = async () => {
 export const getArray = <T>(array: T[]) => (Array.isArray(array) ? array : [])
 
 const upgrade = async () => {
-  const tempDir = join(libRoot, "__temp__")
   await downloadZip('https://github.com/Saber2pr/sa/archive/refs/heads/master.zip', tempDir)
 }
 
