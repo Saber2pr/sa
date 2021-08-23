@@ -27,6 +27,8 @@ elif [[ "$platform" = "github" || "$platform" = "gh" ]]; then
   url="https://github.com/search?q=$keywords"
 elif [[ "$platform" = "baidu" || "$platform" = "bd" ]]; then
   url="https://www.baidu.com/s?wd=$keywords"
+elif [[ "$platform" = "npm" || "$platform" = "n" ]]; then
+  url="https://www.npmjs.com/search?q=$keywords"
 else
   echo "unknown platform: $platform"
   exit
