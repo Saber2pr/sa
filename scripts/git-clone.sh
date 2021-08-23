@@ -1,1 +1,1 @@
-git clone https://github.com/Saber2pr/$1.git $2
+git clone https://github.com/$1.git $2
