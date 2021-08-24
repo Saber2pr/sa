@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/Saber2pr/sa/compare/v0.0.8...v0.0.9) (2021-08-24)
+
+
+### Features
+
+* cat ([5fb43c7](https://github.com/Saber2pr/sa/commit/5fb43c7d2e1c6f2a23da6ec3994c52ed970b1497))
+* clone ([619be59](https://github.com/Saber2pr/sa/commit/619be590d69d66ea9256689331877a027acc7155))
+* clone depth ([da8aa02](https://github.com/Saber2pr/sa/commit/da8aa0299a1a76b8c12178df91f796382de61a2c))
+* npm ([496958c](https://github.com/Saber2pr/sa/commit/496958cda5e5e4f8a9f601767a58c2a3d763ea80))
+* o ([c76a270](https://github.com/Saber2pr/sa/commit/c76a270959a984a7f21d815186af93f5661c1a78))
+* push tag ([6cf992b](https://github.com/Saber2pr/sa/commit/6cf992b62052d2cef4131eea96fe00c7a234154c))
+* tsc ([7c1928d](https://github.com/Saber2pr/sa/commit/7c1928dd2cba68d716e0b9f9d22b459f3c1517d6))
+
 ### [0.0.8](https://github.com/Saber2pr/sa/compare/v0.0.7...v0.0.8) (2021-08-23)
 
 
