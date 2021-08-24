@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { readFileSync } from 'fs';
 import { readdir } from 'fs/promises';
 import { homedir } from 'os';
 import { join, parse, resolve } from 'path';
@@ -85,6 +86,16 @@ export const runInWorkspace = async () => {
 
     if (sysScript === 'ls') {
       console.log(Object.keys(scriptsList).join('\n'))
+      return
+    }
+
+    if (sysScript === 'cat') {
+      const catItem = scriptArgs[1]
+      if (catItem in scriptsList) {
+        console.log(readFileSync(scriptsList[catItem].path).toString('utf8'))
+      } else {
+        console.log(`Sys cat command Fail: ${catItem} not found.`)
+      }
       return
     }
 
