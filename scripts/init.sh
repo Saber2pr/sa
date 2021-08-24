@@ -23,7 +23,7 @@ else
 fi
 
 
-sa git-clone $tpl $name \
+sa git-clone-sa $tpl $name \
 && cd $name \
 && rm -rf .git \
 && git init
