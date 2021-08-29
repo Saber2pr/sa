@@ -1,11 +1,15 @@
 import { spawn } from 'child_process';
+import { readFileSync } from 'fs';
 import { readdir } from 'fs/promises';
+import { homedir } from 'os';
 import { join, parse, resolve } from 'path';
 
 import { downloadZip } from './downloadZip';
 
+const tempDir = join(homedir(), 'saber2pr-cli')
+const updatedScriptsDir = join(tempDir, 'sa-master', 'scripts')
+
 const libRoot = resolve(join(__dirname, '../../'))
-const updatedScriptsDir = join(libRoot, '__temp__', 'sa-master', 'scripts')
 const scriptsDir = join(libRoot, 'scripts')
 
 const runShell = (workspace: string, shellFile: string, args: string[]) => {
@@ -57,7 +61,6 @@ const loadScriptList = async () => {
 export const getArray = <T>(array: T[]) => (Array.isArray(array) ? array : [])
 
 const upgrade = async () => {
-  const tempDir = join(libRoot, "__temp__")
   await downloadZip('https://github.com/Saber2pr/sa/archive/refs/heads/master.zip', tempDir)
 }
 
@@ -83,6 +86,16 @@ export const runInWorkspace = async () => {
 
     if (sysScript === 'ls') {
       console.log(Object.keys(scriptsList).join('\n'))
+      return
+    }
+
+    if (sysScript === 'cat') {
+      const catItem = scriptArgs[1]
+      if (catItem in scriptsList) {
+        console.log(readFileSync(scriptsList[catItem].path).toString('utf8'))
+      } else {
+        console.log(`Sys cat command Fail: ${catItem} not found.`)
+      }
       return
     }
 

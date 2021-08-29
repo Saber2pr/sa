@@ -1,0 +1,1 @@
+git clone $1 --depth=1
