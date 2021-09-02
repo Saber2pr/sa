@@ -16,7 +16,6 @@ elif [ "$type" = "Vscode" ]; then
   tpl="vsc-ext-web-tpl"
 elif [ "$type" = "Lib" ]; then
   tpl="ts-lib-tpl"
-  exit
 else
   echo "Project Type must be React, Vscode or Lib"
   exit
