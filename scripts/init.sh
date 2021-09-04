@@ -16,8 +16,10 @@ elif [ "$type" = "Vscode" ]; then
   tpl="vsc-ext-web-tpl"
 elif [ "$type" = "Lib" ]; then
   tpl="ts-lib-tpl"
+elif [ "$type" = "Lib" ]; then
+  tpl="nest-tpl"
 else
-  echo "Project Type must be React, Vscode or Lib"
+  echo "Project Type must be React, Vscode, Lib or Nest"
   exit
 fi
 
@@ -25,4 +27,6 @@ fi
 sa git-clone-sa $tpl $name \
 && cd $name \
 && rm -rf .git \
-&& git init
+&& git init \
+&& yarn install \
+&& code .
