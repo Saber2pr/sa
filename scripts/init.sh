@@ -5,7 +5,9 @@ if [ "$name" = "" ]; then
   exit
 fi
 
-read -p "Project Type (React?): " type
+tpls="React|Vscode|Lib|Nest"
+
+read -p "Project Type ($tpls?): " type
 type=${type:-React}
 
 tpl=""
@@ -16,10 +18,10 @@ elif [ "$type" = "Vscode" ]; then
   tpl="vsc-ext-web-tpl"
 elif [ "$type" = "Lib" ]; then
   tpl="ts-lib-tpl"
-elif [ "$type" = "Lib" ]; then
+elif [ "$type" = "Nest" ]; then
   tpl="nest-tpl"
 else
-  echo "Project Type must be React, Vscode, Lib or Nest"
+  echo "Project Type must be $tpls"
   exit
 fi
 
