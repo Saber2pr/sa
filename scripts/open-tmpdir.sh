@@ -1,0 +1,1 @@
+open $(node -p 'os.tmpdir()')
