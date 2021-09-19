@@ -1,1 +1,1 @@
-echo hello
+sa _auto
