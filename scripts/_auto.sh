@@ -16,3 +16,4 @@ complete -F _sa sa" > $file
 # enable settings
 chmod +x $file
 source $file
+echo $file done.
