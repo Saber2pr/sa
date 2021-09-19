@@ -5,11 +5,13 @@ commands=$(sa _ ls | tr '\n' ' ')
 sourcedir="/etc/bash_completion.d"
 file="$sourcedir/sa.bash"
 
+mkdir -p $sourcedir
+
 # register to source
 echo "_sa()
 {
     local cur=\${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=( \$(compgen -W "$commands" -- \$cur) )
+    COMPREPLY=( \$(compgen -W \""$commands"\" -- \$cur) )
 }
 complete -F _sa sa" > $file
 
