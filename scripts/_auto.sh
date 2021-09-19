@@ -3,7 +3,7 @@ commands=$(sa _ ls | tr '\n' ' ')
 
 # paths
 sourcedir="/etc/bash_completion.d"
-file="$sourcedir/sa.bash"
+file="$sourcedir/saber2pr_cli.bash"
 
 mkdir -p $sourcedir
 
