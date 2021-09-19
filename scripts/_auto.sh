@@ -13,9 +13,7 @@ echo "_sa()
     local cur=\${COMP_WORDS[COMP_CWORD]}
     COMPREPLY=( \$(compgen -W \""$commands"\" -- \$cur) )
 }
-complete -F _sa sa" > $file
-
-# enable settings
-chmod +x $file
-source $file
-echo $file done.
+complete -F _sa sa" > $file \
+&& chmod +x $file \
+&& source $file \
+&& echo $file done.
