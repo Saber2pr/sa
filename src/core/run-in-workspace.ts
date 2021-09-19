@@ -74,6 +74,8 @@ export const runInWorkspace = async () => {
   const workspacePath = process.cwd()
   const args = process.argv.slice(2)
   const scriptsList = await loadScriptList()
+  const profileScript = scriptsList['profile']
+  delete scriptsList['profile']
 
   const scriptName = args[0]
   const scriptArgs = args.slice(1)
@@ -109,10 +111,16 @@ export const runInWorkspace = async () => {
     return
   }
 
-  if (scriptName in scriptsList) {
-    const script = scriptsList[scriptName]
-    runScript(workspacePath, script, scriptArgs)
+  if (scriptName) {
+    if (scriptName in scriptsList) {
+      const script = scriptsList[scriptName]
+      runScript(workspacePath, script, scriptArgs)
+    } else {
+      console.log(`Run Cli Fail: ${scriptName} not found.`)
+    }
   } else {
-    console.log(`Run Cli Fail: ${scriptName} not found.`)
+    if (profileScript) {
+      runScript(workspacePath, profileScript, scriptArgs)
+    }
   }
 }
