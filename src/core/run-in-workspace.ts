@@ -12,9 +12,14 @@ const updatedScriptsDir = join(tempDir, 'sa-master', 'scripts')
 const libRoot = resolve(join(__dirname, '../../'))
 const scriptsDir = join(libRoot, 'scripts')
 
-const runShell = (workspace: string, shellFile: string, args: string[]) => {
+const runner = {
+  '.js': 'node',
+  '.sh': 'sh'
+}
+
+const runScript = (workspace: string, script: Script, args: string[]) => {
   return new Promise(resolve => {
-    const task = spawn(`sh ${shellFile}`, args, {
+    const task = spawn(`${runner[script.ext]} ${script.path}`, args, {
       cwd: workspace,
       env: process.env,
       shell: true,
@@ -25,25 +30,26 @@ const runShell = (workspace: string, shellFile: string, args: string[]) => {
 }
 
 type Script = {
-  [name: string]: {
-    name: string
-    fileName: string
-    path: string
-  }
+  name: string
+  fileName: string
+  path: string
+  ext: string
 }
 
 const parseScripts = (dir: string, scriptsFiles: string[]) =>
   (scriptsFiles && dir) ? scriptsFiles
     .reduce((acc, fileName) => {
-      const name = parse(fileName).name
+      const parsed = parse(fileName)
       const path = join(dir, fileName)
+      const name = parsed.name
       acc[name] = {
         path,
         name,
-        fileName
+        fileName,
+        ext: parsed.ext
       }
       return acc
-    }, {} as Script) : {}
+    }, {} as Record<string, Script>) : {}
 
 const loadScriptList = async () => {
   const scriptsFiles = await readdir(scriptsDir)
@@ -105,7 +111,7 @@ export const runInWorkspace = async () => {
 
   if (scriptName in scriptsList) {
     const script = scriptsList[scriptName]
-    runShell(workspacePath, script.path, scriptArgs)
+    runScript(workspacePath, script, scriptArgs)
   } else {
     console.log(`Run Cli Fail: ${scriptName} not found.`)
   }

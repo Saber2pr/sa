@@ -1,4 +1,3 @@
-echo "$(node -p '
 const os = require("os") 
 
 function getLocalIP() {
@@ -13,5 +12,4 @@ function getLocalIP() {
   }
 }
 
-getLocalIP()'
-)"
+console.log(getLocalIP())
