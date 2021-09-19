@@ -70,12 +70,14 @@ const upgrade = async () => {
   await downloadZip('https://github.com/Saber2pr/sa/archive/refs/heads/master.zip', tempDir)
 }
 
+const PROFILE = '_profile'
+
 export const runInWorkspace = async () => {
   const workspacePath = process.cwd()
   const args = process.argv.slice(2)
   const scriptsList = await loadScriptList()
-  const profileScript = scriptsList['profile']
-  delete scriptsList['profile']
+  const profileScript = scriptsList[PROFILE]
+  delete scriptsList[PROFILE]
 
   const scriptName = args[0]
   const scriptArgs = args.slice(1)
