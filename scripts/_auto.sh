@@ -18,4 +18,4 @@ complete -F _sa sa" > $file
 # enable settings
 chmod +x $file
 source $file
-echo please run \"source $file\"
+echo "source $file"
