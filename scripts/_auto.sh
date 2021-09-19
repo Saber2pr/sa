@@ -3,7 +3,7 @@ commands=$(sa _ ls | tr '\n' ' ')
 
 # paths
 sourcedir="/etc/bash_completion.d"
-file="$sourcedir/saber2pr_cli.bash"
+file="$sourcedir/sa.bash"
 
 # register to source
 echo "_sa()
