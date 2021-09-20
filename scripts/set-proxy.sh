@@ -1,2 +1,3 @@
-export http_proxy="socks5://127.0.0.1:$1"
-export https_proxy="socks5://127.0.0.1:$1"
+target="socks5://127.0.0.1:$1"
+export http_proxy="$target"
+export https_proxy="$target"
