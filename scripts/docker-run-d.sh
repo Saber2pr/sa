@@ -1,1 +1,1 @@
-docker run -d -it --name="$1" $1
+docker run -d -it --name="$1" $@
