@@ -1,0 +1,1 @@
+FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter "sed 's/$2/$3/'" $1^..HEAD
