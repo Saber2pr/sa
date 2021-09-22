@@ -6,7 +6,6 @@ sourcedir="/etc/bash_completion.d"
 file="$sourcedir/saber2pr_cli.bash"
 
 mkdir -p $sourcedir
-touch $file
 
 # register to source
 echo "_sa()
