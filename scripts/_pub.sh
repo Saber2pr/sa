@@ -30,3 +30,6 @@ sa git-push-u
 # clear temp
 cd ..
 rm -rf $pubtmp
+
+# fix
+rm -rf $name
