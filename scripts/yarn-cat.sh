@@ -1,0 +1,1 @@
+cat yarn.lock | grep -oE -A1 "^$1@\S+"
