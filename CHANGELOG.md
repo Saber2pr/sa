@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/Saber2pr/sa/compare/v0.1.3...v0.1.4) (2021-10-23)
+
+
+### Features
+
+* factory ([f58556b](https://github.com/Saber2pr/sa/commit/f58556b42b33a70cd602e13c5cc8742e11e095cb))
+
 ### [0.1.3](https://github.com/Saber2pr/sa/compare/v0.1.2...v0.1.3) (2021-09-19)
 
 ### [0.1.2](https://github.com/Saber2pr/sa/compare/v0.1.1...v0.1.2) (2021-09-19)
