@@ -1,20 +1,22 @@
-import { spawn } from 'child_process';
-import { readFileSync } from 'fs';
-import { readdir } from 'fs/promises';
-import { homedir } from 'os';
-import { join, parse, resolve } from 'path';
+import { spawn } from 'child_process'
+import { readFileSync } from 'fs'
+import { readdir } from 'fs/promises'
+import { homedir } from 'os'
+import { join, parse } from 'path'
 
-import { downloadZip } from './downloadZip';
+import { downloadZip } from './downloadZip'
 
-const tempDir = join(homedir(), 'saber2pr-cli')
-const updatedScriptsDir = join(tempDir, 'sa-master', 'scripts')
+const getTempDir = (cliName: string) => join(homedir(), cliName)
 
-const libRoot = resolve(join(__dirname, '../../'))
-const scriptsDir = join(libRoot, 'scripts')
+const getUpdatedScriptsDir = async (cliName: string, scriptsDir: string) => {
+  const tempDir = getTempDir(cliName)
+  const result = await readdir(tempDir)
+  return join(getTempDir(cliName), result[0], scriptsDir)
+}
 
 const runner = {
   '.js': 'node',
-  '.sh': 'sh'
+  '.sh': 'sh',
 }
 
 const runScript = (workspace: string, script: Script, args: string[]) => {
@@ -23,7 +25,7 @@ const runScript = (workspace: string, script: Script, args: string[]) => {
       cwd: workspace,
       env: process.env,
       shell: true,
-      stdio: "inherit"
+      stdio: 'inherit',
     })
     task.on('close', resolve)
   })
@@ -37,45 +39,74 @@ type Script = {
 }
 
 const parseScripts = (dir: string, scriptsFiles: string[]) =>
-  (scriptsFiles && dir) ? scriptsFiles
-    .reduce((acc, fileName) => {
-      const parsed = parse(fileName)
-      const path = join(dir, fileName)
-      const name = parsed.name
-      acc[name] = {
-        path,
-        name,
-        fileName,
-        ext: parsed.ext
-      }
-      return acc
-    }, {} as Record<string, Script>) : {}
+  scriptsFiles && dir
+    ? scriptsFiles.reduce((acc, fileName) => {
+        const parsed = parse(fileName)
+        const path = join(dir, fileName)
+        const name = parsed.name
+        acc[name] = {
+          path,
+          name,
+          fileName,
+          ext: parsed.ext,
+        }
+        return acc
+      }, {} as Record<string, Script>)
+    : {}
 
-const loadScriptList = async () => {
+const loadScriptList = async (
+  cliName: string,
+  libRoot: string,
+  scriptsDirName: string
+) => {
+  const scriptsDir = join(libRoot, scriptsDirName)
   const scriptsFiles = await readdir(scriptsDir)
-  let updatedScriptsFiles = null
+  let updatedScripts = {}
   try {
-    updatedScriptsFiles = await readdir(updatedScriptsDir)
-  } catch (error) { }
+    const updatedScriptsDir = await getUpdatedScriptsDir(
+      cliName,
+      scriptsDirName
+    )
+    const updatedScriptsFiles = await readdir(updatedScriptsDir)
+    updatedScripts = parseScripts(updatedScriptsDir, updatedScriptsFiles)
+  } catch (error) {}
 
   const scripts = parseScripts(scriptsDir, scriptsFiles)
-  const updatedScripts = parseScripts(updatedScriptsDir, updatedScriptsFiles)
 
   return Object.assign(scripts, updatedScripts)
 }
 
 export const getArray = <T>(array: T[]) => (Array.isArray(array) ? array : [])
 
-const upgrade = async () => {
-  await downloadZip('https://github.com/Saber2pr/sa/archive/refs/heads/master.zip', tempDir)
+const upgrade = async (cliName: string, releaseZipUrl: string) => {
+  await downloadZip(releaseZipUrl, getTempDir(cliName))
 }
 
 const PROFILE = '_profile'
 
-export const runInWorkspace = async () => {
+export interface CliFactoryOptions {
+  name: string
+  libRoot: string
+  /**
+   * default is `scripts`
+   */
+  scriptsDirName?: string
+  /**
+   * for command `_ u`
+   */
+  releaseZipUrl?: string
+}
+
+export const runInWorkspace = async ({
+  name,
+  libRoot,
+  scriptsDirName = 'scripts',
+  releaseZipUrl,
+}: CliFactoryOptions) => {
+  name = `cli_${name}`
   const workspacePath = process.cwd()
   const args = process.argv.slice(2)
-  const scriptsList = await loadScriptList()
+  const scriptsList = await loadScriptList(name, libRoot, scriptsDirName)
   const profileScript = scriptsList[PROFILE]
   delete scriptsList[PROFILE]
 
@@ -85,13 +116,15 @@ export const runInWorkspace = async () => {
   if (scriptName === '_') {
     const sysScript = scriptArgs[0]
     if (sysScript === 'upgrade' || sysScript === 'u') {
-      try {
-        await upgrade()
-        console.log('upgrade success')
-      } catch (error) {
-        console.log('upgrade fail', error)
+      if (releaseZipUrl) {
+        try {
+          await upgrade(name, releaseZipUrl)
+          console.log('upgrade success')
+        } catch (error) {
+          console.log('upgrade fail', error)
+        }
+        return
       }
-      return
     }
 
     if (sysScript === 'ls') {

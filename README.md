@@ -24,3 +24,16 @@ sa _ ls
 # scripts command
 sa <command> <args>
 ```
+
+used as a creator:
+
+```ts
+import create from '@saber2pr/cli'
+
+create({
+  name: 'saber2pr-cli',
+  libRoot: join(__dirname, '..'),
+  scriptsDirName: 'scripts',
+  releaseZipUrl: 'https://github.com/Saber2pr/sa/archive/refs/heads/master.zip',
+})
+```

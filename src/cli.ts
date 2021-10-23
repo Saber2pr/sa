@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 
-import { runInWorkspace } from './core/run-in-workspace';
+import { join } from 'path'
+import { runInWorkspace } from './core/run-in-workspace'
 
-runInWorkspace()
+runInWorkspace({
+  name: 'saber2pr-cli',
+  libRoot: join(__dirname, '..'),
+  releaseZipUrl: 'https://github.com/Saber2pr/sa/archive/refs/heads/master.zip',
+})
