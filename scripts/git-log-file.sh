@@ -1,0 +1,1 @@
+git log --follow -p -- $1 | grep commit
