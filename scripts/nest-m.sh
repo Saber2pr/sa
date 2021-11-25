@@ -1,36 +1,48 @@
+modulePath="./src/modules"
+
+headUpperCase() {
+  name=$1
+  head=$(echo ${name:0:1} | tr '[a-z]' '[A-Z]')
+  echo $head${name:1}
+}
+
 gen_controller() {
   name=$1
+  Name=$(headUpperCase name)
   echo "import { Controller } from '@nestjs/common';
 
 @Controller('$name')
-export class ${name^}Controller {}
-" > ./src/modules/$1/$1.controller.ts
+export class ${Name}Controller {}
+" > $modulePath/$1/$1.controller.ts
 }
 
 gen_service() {
   name=$1
+  Name=$(headUpperCase name)
   echo "import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ${name^}Service {}
-" > ./src/modules/$1/$1.service.ts
+export class ${Name}Service {}
+" > $modulePath/$1/$1.service.ts
 }
 
 gen_module() {
   name=$1
-  echo "import { ${name^}Service } from './${name}.service';
-import { ${name^}Controller } from './${name}.controller';
+  Name=$(headUpperCase name)
+  echo "import { ${Name}Service } from './${name}.service';
+import { ${Name}Controller } from './${name}.controller';
 import { Module } from '@nestjs/common';
 
 @Module({
-  controllers: [${name^}Controller],
-  providers: [${name^}Service],
-  exports: [${name^}Service],
+  controllers: [${Name}Controller],
+  providers: [${Name}Service],
+  exports: [${Name}Service],
 })
-export class ${name^}Module {}
-" > ./src/modules/$1/$1.module.ts
+export class ${Name}Module {}
+" > $modulePath/$1/$1.module.ts
 }
 
+mkdir $modulePath
 
 gen_controller $1
 gen_service $1
