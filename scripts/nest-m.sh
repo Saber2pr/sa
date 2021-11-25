@@ -1,23 +1,37 @@
-gen_entity() {
+gen_controller() {
   name=$1
-  echo "\
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+  echo "import { Controller } from '@nestjs/common';
 
-@Entity()
-export class ${name^}Entity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column('varchar', { length: 255, default: '' })
-  name: string;
-
-  @Column('varchar', { length: 255, default: '' })
-  value: string;
-}" > ./src/modules/$1/$1.entity.ts
+@Controller('$name')
+export class ${name^}Controller {}
+" > ./src/modules/$1/$1.controller.ts
 }
 
-nest g s $1 modules \
-&& nest g co $1 modules \
-&& nest g mo $1 modules \
-&& rm src/modules/$1/*.spec.ts \
-&& gen_entity $1
+gen_service() {
+  name=$1
+  echo "import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class ${name^}Service {}
+" > ./src/modules/$1/$1.service.ts
+}
+
+gen_module() {
+  name=$1
+  echo "import { ${name^}Service } from './${name}.service';
+import { ${name^}Controller } from './${name}.controller';
+import { Module } from '@nestjs/common';
+
+@Module({
+  controllers: [${name^}Controller],
+  providers: [${name^}Service],
+  exports: [${name^}Service],
+})
+export class ${name^}Module {}
+" > ./src/modules/$1/$1.module.ts
+}
+
+
+gen_controller $1
+gen_service $1
+gen_module $1
