@@ -5,7 +5,7 @@ if [ "$name" = "" ]; then
   exit
 fi
 
-tpls="React|Vscode|Lib|Nest"
+tpls="React|Vscode|Lib|Nest|Golang"
 
 read -p "Project Type ($tpls?): " type
 type=${type:-React}
@@ -20,6 +20,8 @@ elif [ "$type" = "Lib" ]; then
   tpl="ts-lib-tpl"
 elif [ "$type" = "Nest" ]; then
   tpl="nest-tpl"
+  elif [ "$type" = "Golang" ]; then
+  tpl="golangstart"
 else
   echo "Project Type must be $tpls"
   exit
