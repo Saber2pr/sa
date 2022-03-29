@@ -1,0 +1,2 @@
+mkdir -p ./out
+node node_modules/react-native/local-cli/cli.js bundle --max-workers 2 --reset-cache --platform ios --dev false --entry-file index.js --bundle-output ./out/main.jsbundle --assets-dest ./out
