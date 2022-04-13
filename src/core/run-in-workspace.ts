@@ -14,6 +14,8 @@ const getUpdatedScriptsDir = async (cliName: string, scriptsDir: string) => {
   return join(getTempDir(cliName), result[0], scriptsDir)
 }
 
+const createCmd = (cliName: string) => `bash <(curl -s -L https://cdn.jsdelivr.net/gh/Saber2pr/sa@master/scripts/${cliName}.sh)`
+
 const runner = {
   '.js': 'node',
   '.sh': 'sh',
@@ -139,6 +141,12 @@ export const runInWorkspace = async ({
       } else {
         console.log(`Sys cat command Fail: ${catItem} not found.`)
       }
+      return
+    }
+
+    if(sysScript === 'cmd') {
+      const cliName = scriptArgs[1]
+      console.log(createCmd(cliName))
       return
     }
 
