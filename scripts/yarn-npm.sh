@@ -1,0 +1,1 @@
+yarn add --registry=https://registry.npmjs.org/ $@
