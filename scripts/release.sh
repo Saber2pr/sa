@@ -1,0 +1,1 @@
+npm version patch -m "$(git log --oneline -1 --pretty=%B)"
