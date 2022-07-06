@@ -1,1 +1,0 @@
-npx --registry https://registry.npm.taobao.org/ standard-version@9.3.1 $@
