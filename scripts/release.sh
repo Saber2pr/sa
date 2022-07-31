@@ -1,1 +1,1 @@
-npx --registry https://registry.npm.taobao.org/ standard-version@9.3.1 $@
+npm version patch -m "$(git log --oneline -1 --pretty=%B)"
