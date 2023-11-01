@@ -1,6 +1,6 @@
 cwd=$1
 
-if [ "$cwd" = "" ]; then
+if [ "$cwd" != "" ]; then
   echo + cd $cwd
   cd $cwd
 else
