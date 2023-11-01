@@ -1,3 +1,10 @@
 cwd=$1
-echo $cwd
+
+if [ "$cwd" = "" ]; then
+  echo + cd $cwd
+  cd $cwd
+else
+  echo
+fi
+
 sa git-push-u
