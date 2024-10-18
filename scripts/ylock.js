@@ -5,6 +5,11 @@ const fPath = path.join(process.cwd(), 'yarn.lock')
 
 const content = fs.readFileSync(fPath, 'utf8')
 
-const newContent = content.replaceAll(`https://registry.npm.taobao.org/`, 'https://registry.npmmirror.com/')
+const newContent = content
+  .replaceAll(
+    `https://registry.npm.taobao.org/`,
+    'https://registry.npmmirror.com/'
+  )
+  .replaceAll(`https://registry.nlark.com/`, 'https://registry.npmmirror.com/')
 
 fs.writeFileSync(fPath, newContent, 'utf8')
