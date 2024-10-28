@@ -1,11 +1,14 @@
-const os = require("os") 
+const os = require('os')
 
 function getLocalIP() {
   const interfaces = os.networkInterfaces()
   for (const name of Object.keys(interfaces)) {
+    if (!/^en/.test(name)) {
+      continue
+    }
     for (const interf of interfaces[name]) {
       const { address, family, internal } = interf
-      if (family === "IPv4" && !internal) {
+      if (family === 'IPv4' && !internal) {
         return address
       }
     }
