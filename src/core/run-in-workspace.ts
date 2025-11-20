@@ -14,7 +14,8 @@ const getUpdatedScriptsDir = async (cliName: string, scriptsDir: string) => {
   return join(getTempDir(cliName), result[0], scriptsDir)
 }
 
-const createCmd = (cliName: string) => `bash <(curl -s -L https://cdn.jsdelivr.net/gh/Saber2pr/sa@master/scripts/${cliName}.sh)`
+const createCmd = (cliName: string) =>
+  `bash <(curl -s -L https://cdn.jsdelivr.net/gh/Saber2pr/sa@master/scripts/${cliName}.sh)`
 
 const runner = {
   '.js': 'node',
@@ -144,10 +145,21 @@ export const runInWorkspace = async ({
       return
     }
 
-    if(sysScript === 'cmd') {
+    if (sysScript === 'cmd') {
       const cliName = scriptArgs[1]
       console.log(createCmd(cliName))
       return
+    }
+
+    if (sysScript === 'completion' || sysScript === 'auto') {
+      const autoScript = scriptsList['_auto']
+      if (autoScript) {
+        runScript(workspacePath, autoScript, scriptArgs)
+        return
+      } else {
+        console.log('Completion script not found. Please run: sa _auto')
+        return
+      }
     }
 
     console.log(`Sys Command Fail: ${sysScript} not found.`)

@@ -21,6 +21,11 @@ sa _ u
 # ls all commands
 sa _ ls
 
+# install tab completion (bash/zsh)
+sa _ completion
+# or
+sa _ auto
+
 # scripts command
 sa <command> <args>
 ```
