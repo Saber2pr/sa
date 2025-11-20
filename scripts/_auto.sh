@@ -128,9 +128,9 @@ EOF
     chmod +x "$file" 2>/dev/null || true
     
     # Add to zshrc if not already added
-    local zshrc="$HOME/.zshrc"
-    local needs_fpath=false
-    local needs_compinit=false
+    zshrc="$HOME/.zshrc"
+    needs_fpath=false
+    needs_compinit=false
     
     if [[ "$completion_dir" == "$HOME/.zsh/completions" ]]; then
         needs_fpath=true
@@ -138,7 +138,7 @@ EOF
     
     if [ -f "$zshrc" ]; then
         # Check if fpath needs to be added
-        if $needs_fpath && ! grep -qE "fpath=.*\.zsh/completions" "$zshrc" 2>/dev/null; then
+        if [ "$needs_fpath" = "true" ] && ! grep -qE "fpath=.*\.zsh/completions" "$zshrc" 2>/dev/null; then
             needs_fpath=true
         else
             needs_fpath=false
@@ -150,21 +150,25 @@ EOF
         fi
     else
         # Create .zshrc if it doesn't exist
-        touch "$zshrc"
+        if [ -n "$zshrc" ]; then
+            touch "$zshrc" 2>/dev/null || true
+        fi
         needs_fpath=true
         needs_compinit=true
     fi
     
     # Add configuration to .zshrc
-    if $needs_fpath || $needs_compinit; then
-        echo "" >> "$zshrc"
-        echo "# sa completion" >> "$zshrc"
-        if $needs_fpath; then
-            echo "fpath=(\$HOME/.zsh/completions \$fpath)" >> "$zshrc"
-        fi
-        if $needs_compinit; then
-            echo "autoload -U compinit" >> "$zshrc"
-            echo "compinit" >> "$zshrc"
+    if [ "$needs_fpath" = "true" ] || [ "$needs_compinit" = "true" ]; then
+        if [ -n "$zshrc" ] && [ -f "$zshrc" ]; then
+            echo "" >> "$zshrc"
+            echo "# sa completion" >> "$zshrc"
+            if [ "$needs_fpath" = "true" ]; then
+                echo "fpath=(\$HOME/.zsh/completions \$fpath)" >> "$zshrc"
+            fi
+            if [ "$needs_compinit" = "true" ]; then
+                echo "autoload -U compinit" >> "$zshrc"
+                echo "compinit" >> "$zshrc"
+            fi
         fi
     fi
     
