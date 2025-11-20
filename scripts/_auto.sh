@@ -4,8 +4,48 @@
 commands=$(sa _ ls 2>/dev/null | tr '\n' ' ')
 sys_commands="ls cat cmd u upgrade"
 
+# detect shell - check multiple ways to detect zsh
+# Method 1: Check if running in zsh (ZSH_VERSION is set)
+# Method 2: Check $SHELL environment variable
+# Method 3: Check parent shell via ps
+detect_zsh() {
+    if [ -n "$ZSH_VERSION" ]; then
+        return 0
+    fi
+    
+    # Check $SHELL environment variable
+    if [ -n "$SHELL" ] && [[ "$SHELL" == *"zsh"* ]]; then
+        return 0
+    fi
+    
+    # Check parent process
+    local parent_shell=$(ps -p $PPID -o comm= 2>/dev/null | head -1)
+    if [[ "$parent_shell" == *"zsh"* ]]; then
+        return 0
+    fi
+    
+    # Check if zsh is available and is the default shell
+    if command -v zsh >/dev/null 2>&1; then
+        local default_shell=$(getent passwd "$USER" 2>/dev/null | cut -d: -f7)
+        if [[ "$default_shell" == *"zsh"* ]]; then
+            return 0
+        fi
+    fi
+    
+    return 1
+}
+
+# Allow manual override via environment variable
+if [ -n "$SA_COMPLETION_SHELL" ]; then
+    if [[ "$SA_COMPLETION_SHELL" == "zsh" ]]; then
+        FORCE_ZSH=true
+    elif [[ "$SA_COMPLETION_SHELL" == "bash" ]]; then
+        FORCE_BASH=true
+    fi
+fi
+
 # detect shell
-if [ -n "$ZSH_VERSION" ]; then
+if [ -n "$FORCE_ZSH" ] || detect_zsh; then
     # zsh completion - support multiple locations
     # Try user directory first, then system directory
     if [ -w "$HOME/.zsh/completions" ] || mkdir -p "$HOME/.zsh/completions" 2>/dev/null; then
@@ -150,7 +190,7 @@ EOF
         echo "💡 Please restart your terminal or run: compinit"
     fi
     
-elif [ -n "$BASH_VERSION" ]; then
+elif [ -n "$FORCE_BASH" ] || [ -n "$BASH_VERSION" ]; then
     # bash completion
     sourcedir="/etc/bash_completion.d"
     file="$sourcedir/saber2pr_cli.bash"

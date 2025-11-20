@@ -26,6 +26,11 @@ sa _ completion
 # or
 sa _ auto
 
+# For zsh users, if auto-detection fails, use:
+SA_COMPLETION_SHELL=zsh sa _ completion
+# or run directly in zsh:
+zsh -c 'sa _ completion'
+
 # scripts command
 sa <command> <args>
 ```
