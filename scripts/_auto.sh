@@ -6,9 +6,21 @@ sys_commands="ls cat cmd u upgrade"
 
 # detect shell
 if [ -n "$ZSH_VERSION" ]; then
-    # zsh completion
-    completion_dir="$HOME/.zsh/completions"
-    mkdir -p "$completion_dir"
+    # zsh completion - support multiple locations
+    # Try user directory first, then system directory
+    if [ -w "$HOME/.zsh/completions" ] || mkdir -p "$HOME/.zsh/completions" 2>/dev/null; then
+        completion_dir="$HOME/.zsh/completions"
+    elif [ -w "/usr/local/share/zsh/site-functions" ] || [ -w "/usr/share/zsh/site-functions" ]; then
+        if [ -w "/usr/local/share/zsh/site-functions" ]; then
+            completion_dir="/usr/local/share/zsh/site-functions"
+        else
+            completion_dir="/usr/share/zsh/site-functions"
+        fi
+    else
+        completion_dir="$HOME/.zsh/completions"
+        mkdir -p "$completion_dir"
+    fi
+    
     file="$completion_dir/_sa"
     
     cat > "$file" << 'EOF'
@@ -17,19 +29,27 @@ if [ -n "$ZSH_VERSION" ]; then
 _sa() {
     local -a commands sys_commands
     
-    # Get available scripts
-    commands=($(sa _ ls 2>/dev/null))
-    sys_commands=(ls cat cmd u upgrade)
+    # Get available scripts dynamically (with error handling)
+    commands=(${(f)"$(sa _ ls 2>/dev/null)"})
+    sys_commands=(ls cat cmd u upgrade completion auto)
     
+    # Remove empty elements
+    commands=(${commands:#})
+    
+    # words[1] is "sa", words[2] is first argument
     if (( CURRENT == 2 )); then
         # First argument: either "_" or a script name
-        _describe 'commands' commands
-        _describe 'system prefix' '_'
+        local -a all_options
+        all_options=("_" $commands)
+        _describe -t commands 'sa commands' all_options
     elif (( CURRENT == 3 )); then
         # Second argument
         if [[ $words[2] == "_" ]]; then
             # System command
-            _describe 'system commands' sys_commands
+            _describe -t sys-commands 'system commands' sys_commands
+        else
+            # For script commands, use file completion
+            _files
         fi
     elif (( CURRENT == 4 )); then
         # Third argument (for system commands)
@@ -37,28 +57,98 @@ _sa() {
             case $words[3] in
                 cat)
                     # Complete script names for "sa _ cat <script>"
-                    _describe 'scripts' commands
+                    if (( ${#commands} > 0 )); then
+                        _describe -t scripts 'scripts' commands
+                    else
+                        _files
+                    fi
+                    ;;
+                cmd|completion|auto)
+                    # For these commands, use file completion
+                    _files
+                    ;;
+                *)
+                    # For other system commands, use file completion
+                    _files
                     ;;
             esac
+        else
+            # For script arguments, use file completion
+            _files
         fi
+    else
+        # For more arguments, use file completion
+        _files
     fi
 }
 
 _sa "$@"
 EOF
     
-    chmod +x "$file"
+    chmod +x "$file" 2>/dev/null || true
     
     # Add to zshrc if not already added
-    if ! grep -q "fpath=(\$HOME/.zsh/completions \$fpath)" "$HOME/.zshrc" 2>/dev/null; then
-        echo "" >> "$HOME/.zshrc"
-        echo "# sa completion" >> "$HOME/.zshrc"
-        echo "fpath=(\$HOME/.zsh/completions \$fpath)" >> "$HOME/.zshrc"
-        echo "autoload -U compinit && compinit" >> "$HOME/.zshrc"
+    local zshrc="$HOME/.zshrc"
+    local needs_fpath=false
+    local needs_compinit=false
+    
+    if [[ "$completion_dir" == "$HOME/.zsh/completions" ]]; then
+        needs_fpath=true
     fi
     
-    echo "Zsh completion installed at: $file"
-    echo "Please run: source ~/.zshrc"
+    if [ -f "$zshrc" ]; then
+        # Check if fpath needs to be added
+        if $needs_fpath && ! grep -qE "fpath=.*\.zsh/completions" "$zshrc" 2>/dev/null; then
+            needs_fpath=true
+        else
+            needs_fpath=false
+        fi
+        
+        # Check if compinit is already called
+        if ! grep -qE "compinit" "$zshrc" 2>/dev/null; then
+            needs_compinit=true
+        fi
+    else
+        # Create .zshrc if it doesn't exist
+        touch "$zshrc"
+        needs_fpath=true
+        needs_compinit=true
+    fi
+    
+    # Add configuration to .zshrc
+    if $needs_fpath || $needs_compinit; then
+        echo "" >> "$zshrc"
+        echo "# sa completion" >> "$zshrc"
+        if $needs_fpath; then
+            echo "fpath=(\$HOME/.zsh/completions \$fpath)" >> "$zshrc"
+        fi
+        if $needs_compinit; then
+            echo "autoload -U compinit" >> "$zshrc"
+            echo "compinit" >> "$zshrc"
+        fi
+    fi
+    
+    # Try to reload completion in current session
+    if [ -n "$ZSH_VERSION" ]; then
+        # Add to fpath for current session
+        if [[ "$completion_dir" == "$HOME/.zsh/completions" ]]; then
+            fpath=("$HOME/.zsh/completions" $fpath) 2>/dev/null || true
+        fi
+        # Try to reload
+        if command -v compinit >/dev/null 2>&1 || autoload -U compinit 2>/dev/null; then
+            compinit 2>/dev/null || true
+        fi
+    fi
+    
+    echo "✅ Zsh completion installed at: $file"
+    if [[ "$completion_dir" == "$HOME/.zsh/completions" ]]; then
+        echo "📝 Configuration added to ~/.zshrc"
+        echo "💡 Please run: source ~/.zshrc"
+        echo "   Or restart your terminal to enable completion"
+    else
+        echo "📝 Completion installed to system directory: $completion_dir"
+        echo "💡 Please restart your terminal or run: compinit"
+    fi
     
 elif [ -n "$BASH_VERSION" ]; then
     # bash completion
