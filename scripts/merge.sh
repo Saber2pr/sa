@@ -1,0 +1,1 @@
+git merge -s recursive $@
