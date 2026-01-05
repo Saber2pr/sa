@@ -1,0 +1,1 @@
+sudo chown -R $(whoami):$(id -gn) ~/.npm
