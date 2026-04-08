@@ -1,1 +1,1 @@
-git merge -s recursive $@
+git merge --no-ff $@
