@@ -1,0 +1,14 @@
+scripts/fix-pty-overflow.sh
+  h_998775e1d36971 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "c6abb4bcf8ec06bf3322fffcc3d578e273fb6773",
+  "prompts": {},
+  "humans": {
+    "h_998775e1d36971": {
+      "author": "muhai"
+    }
+  }
+}
