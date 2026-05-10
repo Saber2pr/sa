@@ -1,0 +1,14 @@
+scripts/sys-clean.sh
+  h_eabc34dcaf7833 1-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "68a18aaa02d950717ee7d3d79174752069168c97",
+  "prompts": {},
+  "humans": {
+    "h_eabc34dcaf7833": {
+      "author": "muhai <muhai.li@tuya.com>"
+    }
+  }
+}
