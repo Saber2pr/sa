@@ -1,0 +1,1 @@
+curl -L -O https://ghfast.top/$1
