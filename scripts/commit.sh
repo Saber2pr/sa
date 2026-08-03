@@ -1,4 +1,4 @@
-msg="$1"
+msg="$*"
 if [ -z "$msg" ]; then
   echo "错误：缺少提交信息。用法: $0 <commit message>" >&2
   exit 1
