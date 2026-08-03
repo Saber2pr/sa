@@ -1,0 +1,19 @@
+scripts/commit.sh
+  s_49fce8be0a18cb::t_bcbdba0aacf554 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "f29871a2c8bbc3160c9e6488e99548d3e3f1f81f",
+  "prompts": {},
+  "sessions": {
+    "s_49fce8be0a18cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2c462b87-5cf3-4c61-aa96-02ca04daf3aa",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "muhai <muhai.li@tuya.com>"
+    }
+  }
+}
