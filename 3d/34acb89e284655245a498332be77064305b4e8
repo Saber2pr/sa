@@ -1,0 +1,19 @@
+scripts/commit.sh
+  s_d5cfce1d2f3aef::t_a9ccf08348e3a9 1-3,9-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "3d34acb89e284655245a498332be77064305b4e8",
+  "prompts": {},
+  "sessions": {
+    "s_d5cfce1d2f3aef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a724426a-f445-4262-a0e6-76218abcac2d",
+        "model": "unknown"
+      },
+      "human_author": "muhai <muhai.li@tuya.com>"
+    }
+  }
+}
